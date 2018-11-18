@@ -1,30 +1,36 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { formatTweet } from "../utils/helpers"
 
 
 class Tweet extends Component {
     render() {
-        console.log("Tweet Props: ", this.props);
+        const { tweet } = this.props;
+        
+        if (tweet === null) {
+            return <p>This Tweet doesn't exist</p>
+        }
+        
+        console.log(this.props);
+        
         return (
-            <li>
-                <div>
-                    <p>
-                        {this.props.id}
-                    </p>
-                    <p>
-                        {this.props.tweets[this.props.id].text}
-                    </p>
-                </div>
-                
-            </li>
+            <div className="tweet">
+            
+            </div>
         );
     }
 }
 
-function mapStateToProps({ tweets }) {
+function mapStateToProps({authedUser, users, tweets}, { id }) {
+    const tweet = tweets[id];
+    const parentTweet = tweet ? tweets[tweet.replyingTo] : null;
+    
     return {
-         tweets,
-    }
+         authedUser,
+         tweet: tweet 
+         ? formatTweet(tweet, users[tweet.author], authedUser, parentTweet)
+         : null,
+    };
 }
 
 // "8xf0y6ziyjabvozdd253nd": {
@@ -37,4 +43,4 @@ function mapStateToProps({ tweets }) {
 //     replyingTo: null,
 //   },
 
-export default connect(mapStateToProps)(Tweet)
+export default connect(mapStateToProps)(Tweet);
