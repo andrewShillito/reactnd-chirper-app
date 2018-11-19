@@ -11,9 +11,12 @@ class Tweet extends Component {
     }
     handleLike = (e) => {
         e.preventDefault();
-        const { hasLiked, id } = this.props.tweet;
-        const { authedUser } = this.props;
-        this.props.dispatch(handleToggleTweet({hasLiked, id, authedUser}));
+        const { authedUser, dispatch, tweet } = this.props;
+        dispatch(handleToggleTweet({
+            hasLiked: tweet.hasLiked,
+            id: tweet.id,
+            authedUser,
+        }));
     }
     render() {
         const { tweet } = this.props;
