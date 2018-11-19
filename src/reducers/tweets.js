@@ -1,4 +1,4 @@
-import { RECEIVE_TWEETS, TOGGLE_TWEET } from "../actions/tweets";
+import { RECEIVE_TWEETS, TOGGLE_TWEET, ADD_TWEET } from "../actions/tweets";
 
 export default function tweets(state = {}, action) {
     switch(action.type) {
@@ -15,6 +15,11 @@ export default function tweets(state = {}, action) {
             return {
                 ...state,
                 [action.id]: newTweet
+            };
+        case ADD_TWEET :
+            return {
+                ...state,
+                [action.tweet.id]: action.tweet,
             };
         default :
             return state;
