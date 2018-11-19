@@ -1,4 +1,5 @@
 import { saveLikeToggle, saveTweet } from "../utils/api";
+import { showLoading, hideLoading } from "react-redux-loading";
 
 export const RECEIVE_TWEETS = "RECEIVE_TWEETS";
 export const TOGGLE_TWEET = "TOGGLE_TWEET";
@@ -39,12 +40,17 @@ export function addTweet (tweet) {
     };
 }
 
-export function handleAddTweet (info) {
-    return dispatch => {
-        return saveTweet(info)
-            .then((tweet) => {
-                dispatch(addTweet(tweet));
-            })
+export function handleAddTweet (text, replyingTo) {
+    return (dispatch, getState) => {
+        dispatch(showLoading);
+        const { authedUser } = getState();
+        return saveTweet({
+            text, 
+            replyingTo, 
+            author: authedUser
+        })
+            .then((tweet) => dispatch(addTweet(tweet)))
+            .then(() => dispatch(hideLoading()))
             .catch((err) => {
                 console.warn("Error in handling add tweet.", err);
                 alert("There was an error adding the tweet.");
